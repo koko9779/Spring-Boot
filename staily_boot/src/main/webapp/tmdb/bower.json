@@ -1,0 +1,22 @@
+{
+  "name": "moviedb-popular-movies",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Hannan Ali <abdulhannanali@outlook.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.6",
+    "lightbox2": "~2.8.2"
+  }
+}

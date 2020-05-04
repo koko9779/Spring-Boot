@@ -1,0 +1,218 @@
+.p_name{
+	text-align: left;
+	margin: 2% 0px;
+	float:left;
+}
+.product_form_size{
+	width:30%;
+	display:inline-block;
+}
+.movie-poster2 {
+	position: relative;
+	overflow: hidden;
+	margin: 5% 0;
+	border-radius: 10px;
+}
+
+.movie-poster2 img {
+	-webkit-transition: .5s ease-in-out;
+	transition: .5s ease-in-out;
+
+}
+
+.movie-poster2 img:hover {
+	cursor: pointer;
+	transform: scale(1.1); /* 마우스 오버시 이미지 크기를 1.1 배만큼 확대시킨다. */
+	-o-transform: scale(1.1);
+	-moz-transform: scale(1.1);
+	-webkit-transform: scale(1.1);
+	transition: transform .35s;
+	-o-transition: transform .35s;
+	-moz-transition: transform .35s;
+	-webkit-transition: transform .35s;
+	/* 마우스 오버시 이미지가 즉시 커지지않고 30.5 second 의 시간에 걸쳐 커진다 애니메이션 효과*/
+}
+article .tag {
+	font-size: 14px;
+	display: inline-block;
+	margin: 0 2px 5px 0;
+	padding: 5px 8px;
+	letter-spacing: 2px;
+	color: #717171;
+	border: 2px solid #d8d8d8;
+	border-radius: 5px;
+	background-color: #d8d8d8;
+}
+
+article .tag:hover {
+	color: #e76115;
+	border-color: #e76115;
+	background: transparent;
+}
+#mwList{
+	overflow-y:auto;
+}
+.bookmark{
+	border: none;
+	width: 10%;
+	float:left;
+	padding: 0px; 
+	margin: 0 5%;
+}
+@media (min-width:200px){
+	#hero {
+		overflow: hidden;
+	    top: -36px;
+	    min-height: 246px;
+	    height: 246px !important;
+	}
+}
+@media (min-width:576px){
+	#hero {
+		overflow: hidden;
+		top: -48px;
+  		min-height: 322px;
+   		height: 322px !important;
+	}
+}
+@media (min-width:768px){
+	#hero {
+		overflow: hidden;
+	    top: -65px;
+	    min-height: 445px;
+	    height: 445px !important;
+	}
+}
+@media (min-width:992px){
+	#hero {
+		overflow: hidden;
+		min-height: 500px;
+		height:700px !important;
+		top:-150px;
+	}
+	.mainpage_container{
+	top:-150px;
+	position:relative;
+	}
+}
+#content_hero {
+    overflow: hidden;
+    top: -230px;
+    height: 600px !important;
+}
+.totop{
+	top:-130px;
+	position:relative;
+}
+#hero .scroll, #content_hero .scroll {
+	position: absolute;
+	z-index: 1;
+	bottom: 0;
+	left: 50%;
+	margin-left: -45px;
+	-webkit-animation: ScrollDown 1.5s infinite;
+	-moz-animation: ScrollDown 1.5s infinite;
+	-o-animation: ScrollDown 1.5s infinite;
+	animation: ScrollDown 1.5s infinite;
+}
+
+#hero .carousel-inner, #hero .carousel-inner .item {
+	height: 100%;
+	min-height: 600px;
+	text-align: center;
+	background-color: #000;
+	background-position: center;
+	background-size: cover;
+}
+
+#hero .carousel-inner .item:before, #content_hero:before {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: block;
+	content: '';
+	background-image: -webkit-gradient(linear, right bottom, right top, color-stop(0, rgba(0,
+		0, 0, 0)), color-stop(1, rgb(0, 0, 0)));
+	background-image: -o-linear-gradient(top, rgb(0, 0, 0) 0%,
+		rgba(0, 0, 0, 0) 100%);
+	background-image: -moz-linear-gradient(top, rgb(0, 0, 0) 0%,
+		rgba(0, 0, 0, 0) 100%);
+	background-image: -webkit-linear-gradient(top, rgb(0, 0, 0) 0%,
+		rgba(0, 0, 0, 0) 100%);
+	background-image: -ms-linear-gradient(top, rgb(0, 0, 0) 0%,
+		rgba(0, 0, 0, 0) 100%);
+	background-image: linear-gradient(to top, rgb(0, 0, 0) 0%,
+		rgba(0, 0, 0, 0) 100%);
+}
+
+#hero .container {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	display: flex;
+	margin: auto;
+	-webkit-transform: none;
+	-moz-transform: none;
+	transform: none;
+	align-items: center;
+	justify-content: center;
+}
+
+#hero .container .blurb, #content_hero .container .blurb {
+	position: relative;
+	width: 100%;
+	margin-top: 50px;
+	-webkit-animation: Blurb .5s .5s forwards;
+	-moz-animation: Blurb .5s .5s forwards;
+	-o-animation: Blurb .5s .5s forwards;
+	animation: Blurb .5s .5s forwards;
+	text-align: left;
+	opacity: 0;
+}
+
+#hero .container .blurb h1, #content_hero .container .blurb h1 {
+	font-size: 52px;
+	font-weight: 300;
+	padding: 0;
+	-webkit-animation: Heading .5s .5s forwards;
+	-moz-animation: Heading .5s .5s forwards;
+	-o-animation: Heading .5s .5s forwards;
+	animation: Heading .5s .5s forwards;
+	letter-spacing: 3px;
+	opacity: 0;
+	color: #fff;
+	border: none;
+}
+
+#hero .container .blurb .buttons {
+	-webkit-animation: Buttons .5s .5s forwards;
+	-moz-animation: Buttons .5s .5s forwards;
+	-o-animation: Buttons .5s .5s forwards;
+	animation: Buttons .5s .5s forwards;
+	opacity: 0;
+}
+
+#hero .container .blurb p, #content_hero .container .blurb p {
+	font-size: 18px;
+	color: #fff;
+}
+
+#hero .container .blurb .certificate, #content_hero .container .blurb .certificate
+	{
+	font-size: 13px;
+	font-weight: bold;
+	line-height: 48px;
+	display: inline-block;
+	width: 48px;
+	height: 48px;
+	margin-right: 8px;
+	transform: translateY(2px);
+	text-align: center;
+	color: #fff;
+	border: solid 2px #fff;
+	border-radius: 50%;
+}

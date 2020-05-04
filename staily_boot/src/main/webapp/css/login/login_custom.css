@@ -1,0 +1,100 @@
+@charset "UTF-8";
+.m--20 {
+	margin: -20px;
+}
+
+a {
+    color: black;
+    background-color: transparent;
+}
+
+label.error_msg {
+	left: 15px;
+}
+
+.bg-password-image {
+    background: url(/staily/images/work/poster/3.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
+.bg-id-image {
+    background: url(/staily/images/work/poster/2.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
+.bg-register-image {
+    background: url(/staily/images/work/poster/1.jpg);
+	background-repeat : no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.bg-login-image {
+    background: url(/staily/images/work/poster/6.jpg);
+    background-position: center;
+    background-size: cover;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #ea4335;
+    border-color: #fff;
+    border-radius: 10rem;
+}
+
+.btn-primary:hover {
+    color: #fff;
+    background-color: #e12717;
+    border-color: #e6e6e6;
+    border-radius: 10rem;
+}
+
+.btn-primary:active {
+}
+
+.bg-gradient-primary {
+    background-color: #faa82f;
+    background-image: linear-gradient(180deg,#faa82f 10%,#e76115 100%);
+}
+
+.error_msg {
+    font-size: 12px;
+    color: red;
+    position: relative;
+  }
+  
+ .margin {
+ 	margin-bottom: 9px;
+ }
+ 
+/************** member_create.jsp ****************/
+.check_register {
+		color: red;
+  		margin-top: -0.8rem;
+	    margin-bottom: 0.4rem;
+	    margin-left: 0.7rem;
+	    font-size: 12px;
+		visibility: hidden;
+ }
+ 
+.type-button {
+	 color: #fff;
+	 border-radius: 10rem;
+	 
+}
+
+.type-button:hover {
+	color: #fff;
+	background-color: #2e59d9;
+	border-color: #2653d4;
+}
+    
+.gaip-top {
+	margin-top: 1.5rem
+}
+/************************************************/
+/************************************************/
+ 
+ 

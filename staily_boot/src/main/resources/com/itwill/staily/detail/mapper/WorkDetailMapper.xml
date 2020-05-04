@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.detail.mapper.WorkDetailMapper">
+	<select id="selectWorkOne" parameterType="int"
+		resultType="com.itwill.staily.util.Work">
+		select w_no, w_name, w_category, w_date, w_poster, w_tepisode, w_view, w_video
+		from work
+		where w_no = #{wNo}
+	</select>
+	
+	<select id="selectWorkAll" resultType="com.itwill.staily.util.Work">
+		select w_no, w_name, w_poster, w_date, w_tepisode, w_category, w_video
+		from work
+	</select>
+	
+	<insert id="createWorkDetail" parameterType="int">
+		insert into work_detail (wd_no, p_no, w_no, wd_episode)
+		values (wd_no_seq.nextval, product_no_seq.currval, #{wNo}, #{wdEpisode})
+	</insert>
+	
+	<select id="selectTepisode" parameterType="int" resultType="int">
+		select w_tepisode
+		from work
+		where w_no = #{wNo}
+	</select>
+	
+	<update id="increaseWorkView" parameterType="int">
+		update work
+		set w_view = w_view + 1
+		where w_no = #{wNo}
+	</update>		
+</mapper>

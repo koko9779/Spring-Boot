@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.mypage.mapper.MypageMapper">
+
+<!--  
+<resultMap 	id="studentAssociateAddressAddressMapperResultMap" 
+				type="com.mybatis3.domain.Student" >
+		<result column="STUD_ID" property="studId"/>
+		<result column="NAME" property="name"/>
+		<result column="EMAIL" property="email"/>
+		<result column="dob" property="dob"/>
+		<association property="address"
+					 resultMap="com.mybatis3.mapper.AddressMapper.addressResultMap"
+					 autoMapping="true">	
+		</association>		
+	</resultMap>
+-->
+
+<resultMap id="findCompayMap" 
+		   type="com.itwill.staily.util.Member"
+		   autoMapping="true" >
+	<association property="mCompany"
+				 javaType="com.itwill.staily.util.Company"
+				 autoMapping="true">
+	</association>
+</resultMap>
+
+<!-- member출력 -->
+<select id="selectOne"
+		parameterType="int"
+		resultType="com.itwill.staily.util.Member" >
+	SELECT m_no, m_id, m_pw, m_name, m_address, m_daddress, m_email, m_type, m_phone
+	FROM member
+	WHERE m_no=#{mNo}
+</select>
+
+<!-- member삭제 -->
+<delete id="deleteMember"
+		parameterType="int">
+	delete from member
+	where m_no = #{mNo}
+</delete>
+
+<!-- member 수정 -->
+<update id="updateMember"
+	    parameterType="com.itwill.staily.util.Member">
+update member
+set m_id=#{mId}, m_pw=#{mPw}, m_name=#{mName}, m_address=#{mAddress}, m_daddress=#{mDaddress},
+    m_email=#{mEmail}, m_type=#{mType}, m_phone=#{mPhone}
+where m_no=#{mNo}
+</update>
+
+<!-- 멤버&회사 조인 출력 -->
+<select id="selectMemberCompany"
+  		parameterType="int"
+  		resultMap="findCompayMap">
+  	select m.m_no, m.m_id, m_pw, m.m_name, m.m_address, m_daddress, m_email, m_type, m_phone, co_no, co_check
+	from member m
+	join company c
+	on m.m_no = c.m_no
+	where m.m_no = #{mNo}
+</select>
+
+<!-- 내가 쓴글 리스트 -->
+<select id="selectWriteList"
+		parameterType="int"
+		resultType="com.itwill.staily.util.Product">
+	select p.p_no, p.m_no, p.w_no, p.p_scene, m.m_id, p.p_name, p.p_date, p.p_check
+	from product p					  
+	join member m
+	on p.m_no = m.m_no
+	where p.m_no = #{mNo}
+
+</select>
+
+<!-- 내가 쓴 글 삭제 -->
+<delete id="deleteWrite"
+		parameterType="int">
+	delete from product
+	where p_no=#{pNo}
+
+</delete>
+
+<!-- 회사 정보 수정 -->
+<update id="updateCompanyNo"
+		parameterType="int">
+Update company
+Set co_no=#{coNo}
+Where m_no=#{mNo}
+
+</update>
+
+<!--  
+<resultMap type="com.itwill.staily.util.Product" id="selectWriteMap" autoMapping="true">
+	
+</resultMap>
+-->
+<!-- 내가 쓴글 리스트 
+<select id="selectWriteList"
+		parameterType="int"
+		resultType="com.itwill.staily.util.Product">
+	select p.p_no, p.m_no, p.w_no, pd_scene, m.m_id
+	from product p
+	join product_detail pd
+	on p.p_no = pd.p_no
+	join member m
+	on p.m_no = m.m_no
+	where p.m_no = #{mNo}
+
+</select>
+-->
+<!-- 내가 쓴 글 삭제 
+<delete id="deleteWrite"
+		parameterType="int">
+	delete from product
+	where p_no=#{pNo}
+</delete>
+-->
+
+</mapper>

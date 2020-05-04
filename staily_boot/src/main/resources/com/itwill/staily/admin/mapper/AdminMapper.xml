@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.admin.mapper.AdminMapper">
+	<!-- 관리자 메인 -->
+	<select id="popularProduct" resultType="Product">
+	<![CDATA[
+		SELECT p.p_name, p.p_no
+		FROM (SELECT p_name, p_no
+      		  FROM product
+      		  ORDER BY p_view desc)p
+		WHERE rownum <4
+	]]>
+	</select>
+	<select id="popularWork" resultType="Work">
+	<![CDATA[
+		SELECT w.w_name, w.w_no
+		FROM (SELECT w_name, w_no
+      		  FROM work
+      	 	  ORDER BY w_view desc)w
+		WHERE rownum <4
+	]]>
+	</select>
+	<select id="popularBoard" resultType="Board">
+	<![CDATA[
+		SELECT b.b_title, b.b_no,b.b_type
+		FROM (SELECT b_title, b_no,b_type
+   	  		  FROM board
+      		  ORDER BY b_view desc)b
+		WHERE rownum <4
+		AND b.b_type not in 'A'
+	]]>
+	</select>
+	<select id="countUncofirm" resultType="int">
+	SELECT count(*)
+	FROM product
+	WHERE p_check='N'
+	</select>
+	<!-- 회원 -->
+	<select id="selectMemberAll"
+		resultType="com.itwill.staily.util.Member">
+		SELECT m_no ,m_id,
+		m_pw, m_name, m_address, m_daddress, m_email, m_type, m_phone
+		FROM member
+	</select>
+
+	<select id="selectMemberOne"
+		resultType="com.itwill.staily.util.Member" parameterType="int">
+		SELECT m_no, m_id, m_pw, m_name, m_address, m_daddress, m_email, m_type, m_phone
+		FROM member
+		WHERE m_no=#{mNo}
+	</select>
+	
+	<delete id="deleteMember" parameterType="int">
+		DELETE member WHERE m_no=#{mNo}
+	</delete>
+	
+	<update id="updateMember"
+		parameterType="com.itwill.staily.util.Member">
+		UPDATE member SET
+		m_id=#{mId},m_pw=#{mPw},m_name=#{mName},m_address=#{mAddress},
+		m_daddress=#{mDaddress},m_email=#{mEmail},m_type=#{mType},m_phone=#{mPhone}
+		WHERE m_no=#{mNo}
+	</update>
+	<insert id="createMessage" parameterType="com.itwill.staily.mypage.model.dto.Message">
+		insert into message (ms_no, m_no, ms_title, ms_content, ms_date, r_no) 
+        values (MESSAGE_NO_SEQ.nextval,#{mNo},#{msTitle},#{msContent},#{msDate},#{rNo})
+	</insert>
+	<!-- 상품 -->
+	
+	<select id="selectProductAll" resultType="Product">
+		SELECT
+		p_no,p_name,p_price,p_url,p_address,p_daddress,p_check,p_view,p_date,p_scene
+		FROM product
+		ORDER by p_check
+	</select>
+	<select id="selectProductOne" parameterType="int" resultType="Product">
+		SELECT
+		p.p_no,p.w_no,p.p_name,p.p_price,p.p_url,p.p_address,
+        p.p_daddress,p.p_check,m.m_no,
+        p.p_view,p.p_date, pd.pd_no, pd.pd_image, p.p_scene, m.m_id
+		FROM product p, product_detail pd, member m 
+		WHERE p.p_no = pd.p_no
+		AND p.m_no = m.m_no
+		AND p.p_no=#{pNo}
+		
+	</select>
+	<select id="selectUnconfirmProduct"
+		resultType="Product">
+		SELECT
+		p.p_no,p.w_no,p.p_name,p.p_price,p.p_url,p.p_address,
+        p.p_daddress,p.p_check,
+        p.p_view,p.p_date, pd.pd_no, pd.pd_image, p.p_scene, m.m_id
+		FROM product p, product_detail pd, member m 
+		WHERE p.p_no = pd.p_no
+		AND p.m_no = m.m_no
+		AND p.p_check='N'
+
+	</select>
+	<select id="selectProductOnly" parameterType="int" resultType="Product">
+		SELECT
+		p_no,p_name,p_price,p_url,p_address,p_daddress,p_check,p_view,p_date,p_scene
+		FROM product
+		WHERE p_no=#{pNo}
+	</select>
+	
+	<update id="updateProduct" parameterType="Product">
+		UPDATE product SET p_name = #{pName}, p_price = #{pPrice}, p_url = #{pUrl}, 
+		p_address = #{pAddress}, p_daddress = #{pDaddress}, 
+		p_check = #{pCheck}, p_view = #{pView}, p_date = sysdate,p_scene=#{pScene}
+		where p_no = #{pNo}
+	</update>
+	
+	
+	<update id="updateProductDetail" parameterType="Product">
+		UPDATE product_detail SET pd_image=#{pdImage}
+		WHERE pd_no = #{pdNo}
+	</update>
+	
+	<!-- 상품승인 -->
+	
+	<update id="productConfirm" parameterType="int">
+		UPDATE product SET 	p_check = 'Y' WHERE p_no = #{pNo}
+	</update>
+	<!-- 승인거부 -->
+	<insert id="rejectMessage"
+		parameterType="com.itwill.staily.mypage.model.dto.Message">
+	insert into message (ms_no, m_no, ms_title, ms_content, ms_date, r_no) 
+        		 values (MESSAGE_NO_SEQ.nextval,#{mNo},#{msTitle},#{msContent},#{msDate},#{rNo})		
+
+	</insert>
+	<delete id="deleteProduct" parameterType="int">
+		DELETE product WHERE p_no=#{pNo}
+	</delete>
+	
+	<!-- 작품 -->
+	
+	<insert id="createWork"
+		parameterType="com.itwill.staily.util.Work">
+		INSERT INTO work VALUES
+		(work_no_seq.nextval,#{wName},#{wCategory},#{wDate},#{wPoster},#{wTepisode},0,#{wVideo})
+	</insert>
+	<insert id="createWorkDetail" parameterType="Work">
+		INSERT INTO work_detail VALUES
+		(wd_no_seq.nextval,#{pNo},#{mNo},#{wdEpisode})
+	</insert>
+	<select id="selectWorkAll" resultType="Work">
+		SELECT w_no,w_name,w_category,w_date,w_poster,w_tepisode,w_view,w_video
+		FROM work
+	</select>
+	
+	<select id="selectWorkOne" parameterType="int" resultType="Work">
+		SELECT w_no,w_name,w_category,w_date,w_poster,w_tepisode,w_view,w_video
+		FROM work
+		WHERE w_no=#{wNo}		
+	</select>
+		
+	<update id="updateWork" parameterType="Work">
+		UPDATE work SET w_name=#{wName},w_category=#{wCategory},w_date=#{wDate},w_poster=#{wPoster},w_tepisode=#{wTepisode},
+		w_video=#{wVideo}
+		WHERE w_no=#{wNo}
+	</update>
+	
+	<delete id="deleteWork" parameterType="int">
+		DELETE work WHERE w_no=#{wNo}
+	</delete>
+	<!-- 공지 사항 -->
+	<insert id="createNotice" parameterType="Board">
+		<selectKey order="BEFORE" keyProperty="bNo" resultType="int">
+			select board_no_seq.NEXTVAL from dual
+		</selectKey>
+		INSERT INTO board 
+		(b_no, m_no, b_title, b_content, b_groupno, b_step, 
+         b_view, b_recommend, b_type, b_date, b_choice, b_category) 
+		VALUES
+		(#{bNo}, #{mNo}, #{bTitle}, #{bContent}, 
+       	 #{bNo}, 1, 0, null, #{bType}, #{bDate}, null, #{bCategory})
+	</insert>
+	<select id="selectBoardAll" resultType="Board">
+		SELECT 	
+			B_NO,
+			M_NO,
+			B_TITLE,
+			B_CONTENT,
+			B_GROUPNO,
+			B_STEP,
+			B_VIEW,
+			B_TYPE,
+			B_DATE,
+			B_CATEGORY
+		FROM BOARD
+		WHERE b_TYPE='A'
+	</select>
+	<select id="selectBoardOne" resultType="Board" parameterType="int">
+		SELECT 	
+			B_NO,
+			M_NO,
+			B_TITLE,
+			B_CONTENT,
+			B_GROUPNO,
+			B_STEP,
+			B_VIEW,
+			B_TYPE,
+			B_DATE,
+			B_CATEGORY
+		FROM BOARD
+		WHERE b_no=#{bNo}
+	</select>
+	<delete id="deleteNotice" parameterType="int">
+		DELETE 
+		FROM
+		BOARD
+		WHERE
+		B_NO=#{bNo}
+	</delete>
+	<update id="updateNotice" parameterType="Board">
+		UPDATE 
+		BOARD 
+		SET 
+		b_content=#{bContent},
+		b_title=#{bTitle}
+		WHERE 
+		b_no=#{bNo}
+	</update>
+	<update id="updateView" parameterType="int">
+		UPDATE board 
+		SET b_view = b_view + 1
+		WHERE b_no = #{bNo}
+	</update>
+	<insert id="createNoticeReply" parameterType="com.itwill.staily.admin.model.Stats">
+		INSERT 
+		INTO 
+		notice_reply 
+		VALUES 
+		(nr_no_seq.nextval,#{mNo},#{nrContent})
+	</insert>
+	
+	<select id="selectNoticeReply" resultType="com.itwill.staily.admin.model.Stats">
+		SELECT n.nr_no, n.m_no,	n.nr_content, m.m_id
+		FROM 
+		notice_reply n
+		inner join member m
+		on n.m_no = m.m_no
+		order by n.nr_no desc
+	</select>
+	<delete id="deleteNoticeReply" parameterType="int">
+		DELETE
+		FROM
+		notice_reply
+		WHERE
+		nr_no = #{nrNo}	and m_no = #{mNo}
+	</delete>
+	
+</mapper>
+

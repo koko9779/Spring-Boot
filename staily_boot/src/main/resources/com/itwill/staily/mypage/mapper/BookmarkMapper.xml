@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.mypage.mapper.BookmarkMapper">
+
+
+<resultMap id="bmResultMap" type="com.itwill.staily.mypage.model.dto.Bookmark">
+		<result column="bm_no" property="bmNo"/>
+		<association property="member" javaType="com.itwill.staily.util.Member" autoMapping="true">
+		</association>
+		<association property="product" javaType="com.itwill.staily.util.Product" autoMapping="true">
+		</association>
+	</resultMap>
+
+
+<!-- 리스트출력 --> 
+<select id="selectList"
+		parameterType="int"
+		resultMap="bmResultMap">
+	select b.bm_no, b.m_no,b.p_no,p.p_name,p.p_scene, m.m_id, p.w_no
+	 from product p
+	 join member m
+	 on p.m_no = m.m_no
+	 join bookmark b
+	 on b.p_no = p.p_no
+	 where b.m_no = #{mNo}
+</select>
+
+
+<!-- delete -->
+<delete id="deleteBookmark"
+		parameterType="int">
+	delete from bookmark
+	where bm_no = #{bmNo}
+</delete>
+
+
+
+</mapper>

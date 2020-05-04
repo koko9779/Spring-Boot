@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.mypage.mapper.FriendMapper">
+
+<!-- 리스트 출력 -->
+<select id="selectList"
+		parameterType="int"
+		resultType="com.itwill.staily.mypage.model.dto.Friend">
+	select f.m_no, f.f_no, m.m_id ,f.f_pk
+	from friend f 
+	join member m
+	on m.m_no = f.f_no
+	where f.m_no=#{mNo}	
+</select>
+
+<!-- fPk,mNo검색 -->
+<select id="selectFriendPk"
+		parameterType="int"
+		resultType="com.itwill.staily.mypage.model.dto.Friend">
+select f_pk,f_no,m_no
+from friend
+where m_no = #{mNo}
+and f_no = #{fNo}
+</select>
+
+<!-- 삽입 -->
+<insert id="createFriend"
+		parameterType="int">
+	insert into friend (f_pk,f_no,m_no) values(friend_no_seq.nextval,#{fNo},#{mNo})
+</insert>
+
+<!-- 삭제 -->
+<delete id="deleteFriend"
+		parameterType="int">
+	delete from friend
+	where f_pk = #{fPk}
+</delete>
+
+<!-- 친구 검색 -->
+<select id="findFriend"
+		parameterType="String"
+		resultType="String">
+	select m_id
+	from member
+	where m_id=#{mId}		
+</select>
+
+<select id="findFriendNo"
+		parameterType="String"
+		resultType="int">
+	select m_no
+	from member
+	where m_id=#{mId}
+</select>
+
+<!-- 중복체크 -->
+<select id="duplicateFriend"
+		parameterType="String"
+		resultType="int">
+ 	select count(*)
+ 	from member
+ 	where m_id = #{mId}
+</select>
+
+<!-- 친구중복번호체크 -->
+<select id="duplicateFriendNo"
+		parameterType="int"
+		resultType="int">
+ 	select count(*)
+ 	from friend
+ 	where m_no = #{mNo}
+    and f_no = #{fNo}
+</select>
+
+
+</mapper>

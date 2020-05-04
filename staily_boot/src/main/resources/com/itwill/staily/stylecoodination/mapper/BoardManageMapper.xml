@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.itwill.staily.stylecoodination.mapper.BoardManageMapper">
+
+<insert id="createBoard" parameterType="Board">
+	<selectKey order="BEFORE" keyProperty="bNo" resultType="int">
+			select board_no_seq.NEXTVAL from dual
+	</selectKey>
+	INSERT INTO board (b_no, m_no, b_title, b_content, b_groupno, b_step, 
+                  	   b_view, b_recommend, b_type, b_date, b_choice
+                  	   <if test="bCategory != null">
+                  	   , b_category
+                  	   </if>
+                  	   ) 
+	VALUES(#{bNo}, #{mNo}, #{bTitle}, #{bContent}, 
+       	   #{bNo}, 1, 0, null, #{bType}, #{bDate}, null
+       	   <if test="bCategory != null">
+       	   , #{bCategory}
+       	    </if>
+       	   )
+</insert>
+
+<delete id="deleteBoard" parameterType="int">
+	DELETE FROM board 
+	WHERE b_groupno = #{bNo}
+</delete>
+
+<select id="selectUpdateBoard" parameterType="int" resultType="Board">
+	SELECT B.b_no, M.m_id, B.b_title, B.b_content
+	FROM board B
+	JOIN member M
+	ON (B.m_no = M.m_no)
+	WHERE B.b_no = #{bNo}
+</select>
+
+</mapper>

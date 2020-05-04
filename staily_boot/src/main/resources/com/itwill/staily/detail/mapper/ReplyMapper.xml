@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.detail.mapper.ReplyMapper">
+	<select id="selectReplyList" parameterType="int" 
+		resultType="com.itwill.staily.detail.model.dto.Reply">
+		select r.r_no, r.p_no, r.m_no, m.m_id, r.r_content, r.r_recommend, r.r_report
+		from reply r
+		inner join member m
+		on r.m_no = m.m_no
+		where p_no = #{pNo}
+		order by r.r_no desc
+	</select>
+	
+	<select id="selectReplyOne" parameterType="int"
+		resultType="com.itwill.staily.detail.model.dto.Reply">
+		select r_no, p_no, m_no, r_content, r_recommend, r_report
+		from reply
+		where r_no = #{rNo}
+	</select>
+	
+	<insert id="createReply" parameterType="com.itwill.staily.detail.model.dto.Reply">
+		insert into reply
+		values (reply_no_seq.nextval, #{pNo}, #{mNo}, #{rContent}, 0, 0)
+	</insert>
+	
+	<delete id="deleteReply" parameterType="com.itwill.staily.detail.model.dto.Reply">
+		delete from reply
+		where r_no = #{rNo} and p_no = #{pNo} and m_no = #{mNo}
+	</delete>
+	
+	<delete id="deleteReport" parameterType="com.itwill.staily.detail.model.dto.Reply">
+		delete from reply
+		where r_no = #{rNo} and p_no = #{pNo}
+	</delete>
+	
+	<select id="checkReply" parameterType="int" resultType="int">
+		select count(*) from reply_detail
+		where r_no = #{rNo} and m_no = #{mNo}
+	</select>
+	
+	<update id="increaseRecommend" parameterType="int">
+		update reply set r_recommend = r_recommend + 1 where r_no = #{rNo}
+	</update>
+	
+	<update id="increaseReport" parameterType="int">
+		update reply set r_report = r_report + 1 where r_no = #{rNo}
+	</update>
+	
+	<select id="recommendCheck" parameterType="int" resultType="int">
+		select count(*) from reply_detail
+		where r_no = #{rNo} and m_no = #{mNo} and r_recommend = 1	
+	</select>
+	
+	<select id="reportCheck" parameterType="int" resultType="int">
+		select count(*) from reply_detail
+		where r_no = #{rNo} and m_no = #{mNo} and r_report = 1	
+	</select>
+	
+	<update id="setRecommend" parameterType="int">
+		update reply_detail set r_recommend = 1
+		where r_no = #{rNo} and m_no = #{mNo} 
+	</update>
+	
+	<update id="resetRecommend" parameterType="int">
+		update reply_detail set r_recommend = 0
+		where r_no = #{rNo} and m_no = #{mNo} 
+	</update>
+	
+	<update id="setReport" parameterType="int">
+		update reply_detail set r_report = 1
+		where r_no = #{rNo} and m_no = #{mNo} 
+	</update>
+	
+	<update id="resetReport" parameterType="int">
+		update reply_detail set r_report = 0
+		where r_no = #{rNo} and m_no = #{mNo} 
+	</update>
+	
+	<insert id="createRecommend" parameterType="int">
+		insert into reply_detail (rd_no, r_no, m_no, r_recommend)
+		values(rd_no_seq.nextval, #{rNo}, #{mNo}, 1)		
+	</insert>
+	
+	<insert id="createReport" parameterType="int">
+		insert into reply_detail (rd_no, r_no, m_no, r_report)
+		values(rd_no_seq.nextval, #{rNo}, #{mNo}, 1)	
+	</insert>
+	
+	<update id="decreaseRecommend" parameterType="int">
+		update reply set r_recommend = r_recommend - 1 where r_no = #{rNo}
+	</update>
+	
+	<update id="decreaseReport" parameterType="int">
+		update reply set r_report = r_report - 1 where r_no = #{rNo}
+	</update>
+	
+	<select id="checkRecAndRep" parameterType="int" resultType="com.itwill.staily.detail.model.dto.Reply">
+		select r_recommend, r_report
+		from reply_detail
+		where r_no = #{rNo} and m_no = #{mNo}
+	</select>
+</mapper>

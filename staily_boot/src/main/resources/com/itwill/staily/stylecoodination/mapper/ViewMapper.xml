@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.itwill.staily.stylecoodination.mapper.ViewMapper">
+
+<select id="selectBoardTop10" resultType="Board">
+    SELECT Y.*, ROWNUM b_idx
+    FROM (SELECT * 
+            FROM (SELECT ROWNUM b_idx2, X.*
+                    FROM (SELECT B.b_title, B.b_no, B.b_view, B.b_date, M.m_id
+                          FROM board B
+                          JOIN member M
+                          ON B.m_no = M.m_no
+                          WHERE B.b_type = 'S'
+                          AND B.b_step = 1
+                          AND B.b_date >= SYSDATE - 7
+                          ORDER BY B.b_view DESC) X)
+            WHERE ROWNUM &lt;= 10
+            ORDER BY b_view ASC) Y
+    ORDER BY b_idx DESC
+</select>
+
+<select id="selectBoardAll" parameterType="String" resultType="Board">
+	SELECT * 
+	FROM (SELECT ROWNUM b_idx, X.*
+      	  FROM ( SELECT B.b_no, B.b_title, B.b_date, B.b_view, B.b_groupno, M.m_id
+             FROM board B
+             JOIN member M
+             ON B.m_no = M.m_no
+             WHERE B.b_type = #{bType}
+             AND B.b_step = 1
+             ORDER BY B.b_no ASC ) X)
+	ORDER BY b_idx DESC
+</select>
+<select id="findBoardCategory" resultType="Board">
+	SELECT * 
+	FROM (SELECT ROWNUM b_idx, X.*
+      	  FROM ( SELECT B.b_no, B.b_title, B.b_date, B.b_view, B.b_groupno, B.b_category, M.m_id
+             FROM board B
+             JOIN member M
+             ON B.m_no = M.m_no
+             WHERE B.b_type = 'S'
+             AND B.b_step = 1
+              AND b_category = #{bCategory}
+             ORDER BY B.b_no ASC ) X)
+	ORDER BY b_idx DESC
+</select>
+
+<select id="selectBoardOne" resultType="Board">
+	SELECT 	B.* , M.m_id
+		,(SELECT count(*) FROM board_detail A WHERE B.b_no = A.b_no ) AS bd_count 
+		,(SELECT count(*) FROM board_detail A WHERE B.b_no = A.b_no AND A.m_no = #{mNo} ) as user_rec
+	FROM board B
+    JOIN member M
+    ON (B.m_no = M.m_no)
+	WHERE B.b_groupno = #{bNo}
+	ORDER BY B.b_step ASC
+</select>
+
+<select id="selectBoardCount" resultType="int">
+	SELECT count(*)
+	FROM board
+	WHERE b_step = 1
+</select>
+
+<select id="selectBoardCategoryCount" resultType="int">
+	SELECT count(*)
+	FROM board
+	WHERE b_step = 1
+	 AND b_category = #{bCategory}
+</select>
+
+<select id="selectBoardReplyCount" resultType="int">
+	SELECT count(*)
+	FROM board
+	WHERE b_step > 1
+	AND b_type = #{bType}
+	
+</select>
+<select id="selectBoardReplyCategoryCount" resultType="int">
+	SELECT count(*)
+	FROM board
+	WHERE b_step > 1
+	AND b_type = 'S'
+	AND b_category = #{bCategory}
+</select>
+
+
+
+<select id="selectBoardTop10ReplyCount" resultType="int">
+	SELECT count(*)
+	FROM (SELECT B.b_title, B.b_no, B.b_view, M.m_id
+	      FROM board B
+	      JOIN member M
+	      ON B.m_no = M.m_no
+	      WHERE B.b_type = 'S'
+	      AND B.b_step > 1
+	      AND B.b_date >= SYSDATE - 7
+	      ORDER BY B.b_view DESC, B.b_no DESC)
+	WHERE ROWNUM &lt;= 10
+	<!-- 10보다 작거나 같다 -->
+</select>
+
+
+
+<select id="selectUpdateBoard" parameterType="int" resultType="Board">
+SELECT B.*, M.m_id
+FROM board B
+JOIN member M
+ON (B.m_no = M.m_no)
+WHERE b_no = #{bNo}
+</select>
+
+<update id="updateView" parameterType="int">
+	UPDATE board 
+	SET b_view = b_view + 1
+	WHERE b_no = #{bNo}
+</update>
+
+</mapper>

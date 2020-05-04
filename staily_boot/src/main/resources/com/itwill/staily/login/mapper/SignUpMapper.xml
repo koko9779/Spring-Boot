@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.login.mapper.SignUpMapper">
+
+<insert id="createMember" parameterType="Member">
+	<selectKey order="BEFORE" keyProperty="mNo" resultType="int">
+			select member_no_seq.NEXTVAL from dual
+	</selectKey>
+	INSERT INTO member(m_no, m_id, m_pw, m_name, m_address,
+	                   m_daddress, m_email, m_type, m_phone) 
+	VALUES(#{mNo}, #{mId}, #{mPw}, #{mName}, #{mAddress},
+	        #{mDaddress}, #{mEmail}, #{mType}, #{mPhone})
+</insert>
+
+<insert id="createCompany" parameterType="int">
+	INSERT INTO company(m_no, co_no, co_check)
+	VALUES (member_no_seq.CURRVAL, #{coNo}, 'N')
+</insert>
+
+</mapper>

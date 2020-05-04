@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.main.mapper.MainMapper">
+	<resultMap id="bmWithpAndpdResultMap" type="Bookmark" autoMapping="true">
+		<association property="member" javaType="Member" autoMapping="true">
+		</association>
+		<collection property="product" javaType="Product" autoMapping="true">
+		</collection>
+	</resultMap>	
+ 	<!-- 1. 즐겨찾기한 상품 출력 -->
+	<select id="selectByBookmark" parameterType="int" resultMap="bmWithpAndpdResultMap">
+		select b.bm_no,b.m_no,b.p_no,p.p_name,p.p_scene,p.w_no
+		from bookmark b
+		join product p
+		on b.p_no=p.p_no
+		where b.m_no = #{mNo}
+		order by b.p_no desc
+	</select>
+	<!-- 2. HOT 상품 출력 -->
+	<select id="selectByView" resultType="Product">
+	<![CDATA[
+		select p.w_no,p.p_no,p.p_name,p.p_view,p.p_scene
+		from (select *
+		      from product p
+		      where p.p_check='Y'
+		      order by p.p_view desc) p
+		where rownum <= 10
+	 ]]>
+	</select>
+	<!-- 3. TODAY 작품 출력 -->
+	<select id="selectTodayOfWork" resultType="Work">
+		select w.w_no,w.w_poster
+		from work w
+		where to_char(to_date(w.w_date,'yyyy-mm-dd'),'dy')=to_char(sysdate, 'dy')
+		and w.w_category='D'
+	</select>
+	<!-- 4. 카테고리별 작품 출력 -->
+	<select id="selectByCategory" parameterType="String" resultType="Work">
+		select w_no,w_category,w_poster
+		from work
+		where w_category=#{wCategory}
+		order by w_no desc
+	</select>	
+</mapper>

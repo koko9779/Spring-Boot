@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.admin.mapper.StatsMapper">
+	<insert id="createStats" parameterType="com.itwill.staily.admin.model.Stats">
+            INSERT
+            INTO STATS
+            (
+                ST_NO,
+                ST_IP,
+                ST_TIME,
+                ST_REFER,
+                ST_AGENT
+            )
+            VALUES
+            (
+                STATS_NO_SEQ.NEXTVAL,
+                #{stIp},
+                SYSDATE,
+                #{stRefer},
+                #{stAgent}
+            )
+        </insert>
+    <select id="selectTime" resultType="com.itwill.staily.admin.model.Stats" parameterType="java.lang.String">
+    <![CDATA[
+    	SELECT t2.cnt , t2.st_time 
+		FROM (
+			SELECT t1.cnt , t1.st_time
+			FROM 
+				( SELECT count(st_no) as cnt
+				, to_char(st_time,'yyyy-mm-dd') as st_time
+				FROM
+				stats
+				WHERE to_char(st_time,'yyyy-mm-dd') <= #{stTime}
+				GROUP BY to_char(st_time,'yyyy-mm-dd')
+				) t1
+			ORDER BY t1.st_time desc ) t2
+		WHERE ROWNUM < 8
+	]]>
+    </select>
+    <select id="selectBrowser" resultType="com.itwill.staily.admin.model.Stats">
+    	SELECT count(st_no) cnt, st_agent
+		FROM
+		stats
+		GROUP BY st_agent
+    </select>
+</mapper>
+

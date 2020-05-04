@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.itwill.staily.stylecoodination.mapper.ReplyManageMapper">
+
+<update id="updateStep" parameterType="int">
+	UPDATE board 
+	SET b_step = b_step + 1 
+	WHERE b_step > 1 
+	AND b_groupno = #{bGroupNo}
+</update>
+
+<insert id="createReply" parameterType="Board">
+	<selectKey order="BEFORE" keyProperty="bNo" resultType="int">
+			select board_no_seq.NEXTVAL from dual
+	</selectKey>
+	INSERT INTO board (b_no, m_no, b_title, b_content, b_groupno, b_step, 
+                   b_view, b_recommend, b_type, b_date, b_choice)
+	VALUES (#{bNo}, #{mNo}, #{bTitle}, #{bContent}, #{bGroupNo}, 2,
+       		 0, 0, 'S', #{bDate}, 'N')
+</insert>
+
+<delete id="deleteReply" parameterType="int">
+	DELETE FROM board WHERE b_no = #{bNo}
+</delete>
+
+<update id="updateChoice" parameterType="int">
+	UPDATE board
+	SET b_choice = 'Y'
+	WHERE b_no = #{bNo}
+</update>
+
+<update id="updateRecommend" parameterType="int">
+	UPDATE board 
+	SET b_recommend = b_recommend + 1
+	WHERE b_no = #{bNo}
+</update>
+
+<select id="isRecommmendCheck" parameterType="Board" resultType="int">
+	SELECT count(*)
+	FROM board_detail
+	WHERE m_no = #{mNo}
+	AND b_no = #{bNo}
+</select>
+
+<select id="totalRec" parameterType="int" resultType="int">
+	SELECT count(*)
+	FROM board_detail
+	WHERE b_no = #{bNo}
+</select>
+
+<delete id="deleteRec">
+	DELETE FROM board_detail 
+	WHERE m_no = #{mNo} 
+	AND b_no = #{bNo}
+</delete>
+
+<insert id="insertRec">
+	INSERT INTO board_detail (b_no, m_no) 
+	VALUES (#{bNo}, #{mNo})
+</insert>
+
+<select id="selectTotRec" resultType="int">
+	SELECT count(*)
+	FROM board_detail
+	WHERE b_no = #{bNo}
+</select>
+</mapper>  

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.mypage.mapper.MessageMapper">
+
+<!-- 하나출력 -->
+<select id="selectOne"
+		parameterType="int"
+		resultType="com.itwill.staily.mypage.model.dto.Message">
+ select ms_no,ms_title,ms_date, m.m_id, ms.ms_content, m.m_no
+ from member m
+ join message ms
+ on m.m_no = ms.m_no
+ where ms.r_no = #{rNo}
+ and ms_no = #{msNo}
+</select>
+
+<!-- 메시지 받은 리스트 출력 -->
+<select id="selectList"
+ 	    parameterType="int"
+ 	    resultType="com.itwill.staily.mypage.model.dto.Message">
+select ms_no,ms_title,ms_date, m.m_id
+ from member m
+ join message ms
+ on m.m_no = ms.m_no
+ where ms.r_no = #{rNo}
+</select>
+
+
+<!-- 삽입 -->
+<insert id="createMessage"
+		parameterType="com.itwill.staily.mypage.model.dto.Message">
+	insert into message (ms_no, m_no, ms_title, ms_content, ms_date, r_no) 
+        		 values (MESSAGE_NO_SEQ.nextval,#{mNo},#{msTitle},#{msContent},sysdate,#{rNo})		
+
+</insert>
+
+<!-- 삭제 -->
+<delete id="deleteMessage"
+		parameterType="int">
+	delete from message
+	where ms_no = #{msNo}
+</delete>
+
+
+</mapper>

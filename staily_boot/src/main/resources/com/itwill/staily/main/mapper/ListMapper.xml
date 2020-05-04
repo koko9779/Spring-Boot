@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itwill.staily.main.mapper.ListMapper">
+	<resultMap id="fourTableResultMap" type="Work" autoMapping="true">
+		<collection property="product" ofType="Product" autoMapping="true">
+		</collection>
+	</resultMap>
+	<resultMap id="pAndwdResultMap" type="Work" autoMapping="true">
+		<collection property="product" ofType="Product" autoMapping="true">
+		</collection>
+	</resultMap>	
+	<!-- 2.작품상세페이지 상품리스트 출력(기업) -->
+	<select id="selectCProductList" parameterType="int" resultMap="fourTableResultMap">
+		select p.p_no,p.w_no,p.m_no,p.p_scene,p.p_name,m.m_id,wd.wd_episode,p.p_view
+		from product p
+		join work w
+		on p.w_no=w.w_no
+		join work_detail wd
+		on p.p_no=wd.p_no
+		join member m
+		on m.m_no=p.m_no
+		where p.p_check='Y'
+		and m.m_type='C'
+		and w.w_no=#{wNo}
+		ORDER BY p.p_date
+	</select>
+	<!-- 3. 작품상세페이지 상품리스트 출력(일반) -->
+	<select id="selectMProductList" parameterType="int" resultMap="fourTableResultMap">
+	<![CDATA[
+		select *
+		from(
+			select rownum idx,s.*
+		    from(select p.p_no,p.w_no,p.m_no,p.p_scene,p.p_name,m.m_id,wd.wd_episode,p.p_view
+		        from product p
+		        join work w
+		        on p.w_no=w.w_no
+		        join work_detail wd
+		        on p.p_no=wd.p_no
+		        join member m
+		        on m.m_no=p.m_no
+		        where p.p_check='Y'
+		        and m.m_type='M'
+		        and w.w_no=#{wNo}
+		        ORDER BY p.p_date)s
+		)
+		where idx >=#{start} and idx <= #{end}
+	]]>
+	</select>
+	<!-- 4.작품상세페이지 상품리스트 회차별 출력(기업) -->
+	<select id="selectCProductListByEpisode" parameterType="map" resultMap="fourTableResultMap">
+		select p.p_no,p.w_no,p.m_no,p.p_scene,p.p_name,m.m_id,wd.wd_episode,p.p_view
+		from product p
+		join work w
+		on p.w_no=w.w_no
+		join work_detail wd
+		on p.p_no=wd.p_no
+		join member m
+		on m.m_no=p.m_no
+		where p.p_check='Y'
+		and m.m_type='C'
+		and w.w_no=#{wNo}
+		and wd.wd_episode=#{wdEpisode}
+		ORDER BY p.p_date
+	</select> 
+	<!-- 5.작품상세페이지 상품리스트 회차별 출력(일반) -->
+	<select id="selectMProductListByEpisode" parameterType="map" resultMap="fourTableResultMap">
+	<![CDATA[
+		select *
+		from(
+			select rownum idx,s.*
+		    from(select p.p_no,p.w_no,p.m_no,p.p_scene,p.p_name,m.m_id,wd.wd_episode,p.p_view
+				from product p
+				join work w
+				on p.w_no=w.w_no
+				join work_detail wd
+				on p.p_no=wd.p_no
+				join member m
+				on m.m_no=p.m_no
+				where p.p_check='Y'
+				and m.m_type='M'
+				and w.w_no=#{wNo}
+				and wd.wd_episode=#{wdEpisode}
+		        ORDER BY p.p_date)s
+		)
+		where idx >=#{start} and idx <= #{end}
+	]]>
+	</select>
+	<!-- 6.즐겨찾기 등록 -->
+	<insert id="createBookmark" parameterType="map"> 
+		<selectKey order="BEFORE" keyProperty="bmNo" resultType="int">
+			select BM_NO_SEQ.nextval from dual
+		</selectKey>
+		insert into bookmark values(#{bmNo},#{mNo},#{pNo})
+	</insert>
+	<!-- 7.즐겨찾기 제거 -->
+	<delete id="deleteBookmark" parameterType="int" >
+		delete from bookmark where bm_no=#{bmNo}
+	</delete>
+	<!-- 8.즐겨찾기 번호찾기 -->
+	<select id="selectBookmarkNo" parameterType="int" resultType="int">
+		select bm_no from bookmark where m_no = #{mNo} and p_no = #{pNo}
+	</select>
+	<!-- 9.게시물 총 건수 -->		
+	<select id="selectProductCount" parameterType="int" resultType="int">
+		select count(*)
+		from product p
+		where p.p_check='Y' 
+		and p.w_no=#{wNo}
+	</select>
+	<!-- 10.에피소드별 게시물 총 건수 -->
+	<select id="selectProductCountByEpisode" parameterType="int" resultType="int">
+		select count(*) 
+		from (select *
+		        from product p
+		        join work_detail wd
+		        on p.p_no = wd.p_no
+		        where p.p_check='Y'
+		        and p.w_no=#{wNo}
+		        and wd.wd_episode=#{wdEpisode}
+		)
+	</select>
+	<!-- 11.전체 상품 리스트 -->
+	<select id="selectProductList" resultMap="fourTableResultMap">	
+		select p.p_no,p.w_no,p.m_no,p.p_scene,p.p_name,m.m_id,wd.wd_episode,p.p_view
+		from product p
+		join work w
+		on p.w_no=w.w_no
+		join work_detail wd
+		on p.p_no=wd.p_no
+		join member m
+		on m.m_no=p.m_no
+		where p.p_check='Y'
+		ORDER BY p.p_date
+	</select>
+</mapper>

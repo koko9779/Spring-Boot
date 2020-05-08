@@ -2,12 +2,13 @@ package com.itwill.staily.mypage.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.itwill.staily.util.Company;
 import com.itwill.staily.util.Member;
 import com.itwill.staily.util.Product;
-
+@Mapper
 public interface MypageMapper {
 	
 	//멤버 하나 선택

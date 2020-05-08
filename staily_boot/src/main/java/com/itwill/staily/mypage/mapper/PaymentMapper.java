@@ -2,8 +2,10 @@ package com.itwill.staily.mypage.mapper;
 
 import java.util.List;
 
-import com.itwill.staily.mypage.model.dto.Payment;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.itwill.staily.mypage.model.dto.Payment;
+@Mapper
 public interface PaymentMapper {
 	
 	//결제 하나 선택

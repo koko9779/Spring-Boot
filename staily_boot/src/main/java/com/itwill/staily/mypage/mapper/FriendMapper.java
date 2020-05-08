@@ -2,12 +2,13 @@ package com.itwill.staily.mypage.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.itwill.staily.mypage.model.dto.Friend;
 import com.itwill.staily.util.Member;
 
-
+@Mapper
 public interface FriendMapper {
 	
 	//친구 1명 출력(Pk로)

@@ -2,8 +2,10 @@ package com.itwill.staily.mypage.mapper;
 
 import java.util.List;
 
-import com.itwill.staily.mypage.model.dto.Bookmark;
+import org.apache.ibatis.annotations.Mapper;
 
+import com.itwill.staily.mypage.model.dto.Bookmark;
+@Mapper
 public interface BookmarkMapper {
 	
 	//북마크 리스트출력
